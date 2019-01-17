@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.net.InetAddress;
 
 /**
  * @author 王睿
@@ -47,11 +48,16 @@ public class LogsFormat {
                 e.printStackTrace();
             }
         }
-        html = html.replace("<![data]>", sb.toString());
+        InetAddress addr = InetAddress.getLocalHost();
+        String hostName = addr.getHostName() + "（IP：" + addr.getHostAddress() + "）";
+        html = html.replace("<![data]>", sb.toString())
+                .replace("<![log-file-path]>", file.getAbsolutePath())
+                .replace("<![log-file-host]>", hostName);
         File outFile = new File(file.getPath() + ".html");
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8");
         out.write(html);
         out.close();
         System.out.println("Docker日志格式化成功，请查看：" + outFile.getAbsoluteFile());
+
     }
 }

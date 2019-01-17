@@ -42,6 +42,16 @@
         <button onclick="empty();">清空</button>
     </div>
 </div>
+<h3 id="log-file-path-h3">
+    <div>
+        <label>日志主机：</label>
+        <label><![log-file-host]></label>
+    </div>
+    <div>
+        <label>日志文件：</label>
+        <label><![log-file-path]></label>
+    </div>
+</h3>
 <table>
     <thead>
     <tr>
@@ -91,6 +101,8 @@
     function empty() {
         document.getElementById("logs-text").value = null;
         document.getElementById("logs-tbody").innerHTML = null;
+        var h3 = document.getElementById("log-file-path-h3");
+        h3.parentNode.removeChild(h3);
     }
 
 </script>
