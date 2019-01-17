@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docker 容器日志格式化</title>
+    <style>
+        body {
+            font-size: 12px;
+            font-family: consolas;
+        }
+
+        td {
+            word-break: keep-all;
+            white-space: nowrap;
+        }
+
+        tr, td {
+            padding-right: 5px;
+        }
+
+        tr.stderr {
+            color: red;
+        }
+
+        .goto-top {
+            position: fixed;
+            right: 5px;
+            bottom: 5px;
+            font-size: 24px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+<div id="top"></div>
+<div>
+    <div>
+        <textarea id="logs-text"></textarea>
+    </div>
+    <div>
+        <button onclick="format();">格式化</button>
+        <button onclick="empty();">清空</button>
+    </div>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>行号</th>
+        <th>时间</th>
+        <th align="left">日志信息</th>
+    </tr>
+    </thead>
+    <tbody id="logs-tbody"><![data]></tbody>
+</table>
+<div class="goto-top"><a href="#top">回顶部</a></div>
+</body>
+<script>
+
+    function format() {
+        document.getElementById("logs-tbody").innerHTML = null;
+        var text = document.getElementById("logs-text").value;
+        var textArr = text.split("\n");
+        for (var i = 0; i < textArr.length; i++) {
+            var logJson = textArr[i].trim();
+            if (logJson != "") {
+                try {
+                    var json = JSON.parse(logJson);
+                } catch (e) {
+                    var errorInfo = "第" + (i + 1) + "行：[" + logJson + "]语法不对，请重新输入需要格式化的日志信息。";
+                    console.error(errorInfo);
+                    console.error(e);
+                    alert(errorInfo);
+                    break;
+                }
+                var time = new Date(json.time);
+                var log = json.log;
+                var stream = json.stream;
+                var timeStr = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate()
+                    + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+                var tr = document.createElement("tr");
+                if (stream == "stderr") {
+                    tr.classList.add("stderr");
+                }
+                var html = '<td>' + (i + 1) + '</td><td>' + timeStr + '</td><td>' + log + '</td>';
+                tr.innerHTML = html;
+                document.getElementById("logs-tbody").append(tr);
+            }
+        }
+    }
+
+    function empty() {
+        document.getElementById("logs-text").value = null;
+        document.getElementById("logs-tbody").innerHTML = null;
+    }
+
+</script>
+</html>
