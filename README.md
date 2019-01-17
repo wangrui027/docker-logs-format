@@ -16,5 +16,4 @@
 
 
 
-PS：如果没有`jdk`环境，请跳过步骤1，直接下载[可执行jar包](docker-logs-format-1.0-SNAPSHOT-jar-with-dependencies.jar)使用。
-
+PS：如果没有`jdk`环境，请跳过步骤1，直接下载[可执行jar包](docker-logs-format-1.0-SNAPSHOT-jar-with-dependencies.jar)使用，jar包编译版本为`1.8`，运行请至少安装`jre1.8`版本。
